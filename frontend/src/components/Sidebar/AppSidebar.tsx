@@ -12,20 +12,29 @@ import useAuth from "@/hooks/useAuth"
 import { type Item, Main } from "./Main"
 import { User } from "./User"
 
-const baseItems: Item[] = [
+const commonItems: Item[] = [
   { icon: Home, title: "Dashboard", path: "/" },
   { icon: Briefcase, title: "Items", path: "/items" },
+  { icon: BarChart3, title: "Worklogs", path: "/worklogs" },
+]
+
+const freelancerItems: Item[] = [
   { icon: ListTodo, title: "Tasks", path: "/tasks" },
   { icon: Timer, title: "Time Entries", path: "/time-entries" },
-  { icon: BarChart3, title: "Worklogs", path: "/worklogs" },
+]
+
+const adminItems: Item[] = [
+  { icon: Users, title: "Admin", path: "/admin" },
 ]
 
 export function AppSidebar() {
   const { user: currentUser } = useAuth()
 
-  const items = currentUser?.is_superuser
-    ? [...baseItems, { icon: Users, title: "Admin", path: "/admin" }]
-    : baseItems
+  const isAdmin = currentUser?.is_superuser || currentUser?.role === "ADMIN"
+
+  const items = isAdmin
+    ? [...commonItems, ...adminItems]
+    : [...commonItems, ...freelancerItems]
 
   return (
     <Sidebar collapsible="icon">
