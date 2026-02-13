@@ -16,8 +16,8 @@ depends_on = None
 
 
 def upgrade():
-    userrole_enum = postgresql.ENUM('ADMIN', 'FREELANCER', name='userrole', create_type=True)
-    userrole_enum.create(op.get_bind())
+    userrole_enum = postgresql.ENUM('ADMIN', 'FREELANCER', name='userrole', create_type=False)
+    userrole_enum.create(op.get_bind(), checkfirst=True)
     op.add_column('user', sa.Column('role', userrole_enum, nullable=False, server_default='FREELANCER'))
     op.add_column('user', sa.Column('hourly_rate', sa.Float(), nullable=True))
 
@@ -48,8 +48,8 @@ def upgrade():
     op.create_index('ix_timeentry_freelancer_id', 'timeentry', ['freelancer_id'])
     op.create_index('ix_timeentry_start_time', 'timeentry', ['start_time'])
 
-    paymentbatchstatus_enum = postgresql.ENUM('DRAFT', 'CONFIRMED', name='paymentbatchstatus', create_type=True)
-    paymentbatchstatus_enum.create(op.get_bind())
+    paymentbatchstatus_enum = postgresql.ENUM('DRAFT', 'CONFIRMED', name='paymentbatchstatus', create_type=False)
+    paymentbatchstatus_enum.create(op.get_bind(), checkfirst=True)
 
     op.create_table(
         'paymentbatch',
