@@ -165,19 +165,45 @@ class TasksPublic(SQLModel):
 
 
 # TimeEntry
-class TimeEntry(SQLModel, table=True):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    task_id: uuid.UUID = Field(foreign_key="task.id", nullable=False, ondelete="CASCADE")
-    freelancer_id: uuid.UUID = Field(foreign_key="user.id", nullable=False, ondelete="CASCADE")
-
+class TimeEntryBase(SQLModel):
+    task_id: uuid.UUID
     start_time: datetime
     end_time: datetime
     description: str | None = Field(default=None)
+
+
+class TimeEntryCreate(TimeEntryBase):
+    pass
+
+
+class TimeEntryUpdate(SQLModel):
+    task_id: uuid.UUID | None = None
+    start_time: datetime | None = None
+    end_time: datetime | None = None
+    description: str | None = None
+
+
+class TimeEntry(TimeEntryBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    task_id: uuid.UUID = Field(foreign_key="task.id", nullable=False, ondelete="CASCADE")
+    freelancer_id: uuid.UUID = Field(foreign_key="user.id", nullable=False, ondelete="CASCADE")
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
     task: Task | None = Relationship(back_populates="time_entries")
     freelancer: User | None = Relationship(back_populates="time_entries")
     payments: list["Payment"] = Relationship(back_populates="time_entry", cascade_delete=True)
+
+
+class TimeEntryPublic(TimeEntryBase):
+    id: uuid.UUID
+    freelancer_id: uuid.UUID
+    created_at: datetime
+    task_title: str
+
+
+class TimeEntriesPublic(SQLModel):
+    data: list[TimeEntryPublic]
+    count: int
 
 
 # PaymentBatch

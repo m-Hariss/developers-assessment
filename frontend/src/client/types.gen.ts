@@ -74,6 +74,36 @@ export type TaskUpdate = {
     description?: (string | null);
 };
 
+export type TimeEntriesPublic = {
+    data: Array<TimeEntryPublic>;
+    count: number;
+};
+
+export type TimeEntryCreate = {
+    task_id: string;
+    start_time: string;
+    end_time: string;
+    description?: (string | null);
+};
+
+export type TimeEntryPublic = {
+    task_id: string;
+    start_time: string;
+    end_time: string;
+    description?: (string | null);
+    id: string;
+    freelancer_id: string;
+    created_at: string;
+    task_title: string;
+};
+
+export type TimeEntryUpdate = {
+    task_id?: (string | null);
+    start_time?: (string | null);
+    end_time?: (string | null);
+    description?: (string | null);
+};
+
 export type Token = {
     access_token: string;
     token_type?: string;
@@ -233,6 +263,38 @@ export type TasksDeleteTaskData = {
 };
 
 export type TasksDeleteTaskResponse = (Message);
+
+export type TimeEntriesReadTimeEntriesData = {
+    limit?: number;
+    skip?: number;
+};
+
+export type TimeEntriesReadTimeEntriesResponse = (TimeEntriesPublic);
+
+export type TimeEntriesCreateTimeEntryData = {
+    requestBody: TimeEntryCreate;
+};
+
+export type TimeEntriesCreateTimeEntryResponse = (TimeEntryPublic);
+
+export type TimeEntriesReadTimeEntryData = {
+    id: string;
+};
+
+export type TimeEntriesReadTimeEntryResponse = (TimeEntryPublic);
+
+export type TimeEntriesUpdateTimeEntryData = {
+    id: string;
+    requestBody: TimeEntryUpdate;
+};
+
+export type TimeEntriesUpdateTimeEntryResponse = (TimeEntryPublic);
+
+export type TimeEntriesDeleteTimeEntryData = {
+    id: string;
+};
+
+export type TimeEntriesDeleteTimeEntryResponse = (Message);
 
 export type UsersReadUsersData = {
     limit?: number;

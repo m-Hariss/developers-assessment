@@ -15,6 +15,7 @@ import { Route as RecoverPasswordRouteImport } from './routes/recover-password'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LayoutRouteImport } from './routes/_layout'
 import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
+import { Route as LayoutTimeEntriesRouteImport } from './routes/_layout/time-entries'
 import { Route as LayoutTasksRouteImport } from './routes/_layout/tasks'
 import { Route as LayoutSettingsRouteImport } from './routes/_layout/settings'
 import { Route as LayoutItemsRouteImport } from './routes/_layout/items'
@@ -49,6 +50,11 @@ const LayoutIndexRoute = LayoutIndexRouteImport.update({
   path: '/',
   getParentRoute: () => LayoutRoute,
 } as any)
+const LayoutTimeEntriesRoute = LayoutTimeEntriesRouteImport.update({
+  id: '/time-entries',
+  path: '/time-entries',
+  getParentRoute: () => LayoutRoute,
+} as any)
 const LayoutTasksRoute = LayoutTasksRouteImport.update({
   id: '/tasks',
   path: '/tasks',
@@ -79,6 +85,7 @@ export interface FileRoutesByFullPath {
   '/items': typeof LayoutItemsRoute
   '/settings': typeof LayoutSettingsRoute
   '/tasks': typeof LayoutTasksRoute
+  '/time-entries': typeof LayoutTimeEntriesRoute
   '/': typeof LayoutIndexRoute
 }
 export interface FileRoutesByTo {
@@ -90,6 +97,7 @@ export interface FileRoutesByTo {
   '/items': typeof LayoutItemsRoute
   '/settings': typeof LayoutSettingsRoute
   '/tasks': typeof LayoutTasksRoute
+  '/time-entries': typeof LayoutTimeEntriesRoute
   '/': typeof LayoutIndexRoute
 }
 export interface FileRoutesById {
@@ -103,6 +111,7 @@ export interface FileRoutesById {
   '/_layout/items': typeof LayoutItemsRoute
   '/_layout/settings': typeof LayoutSettingsRoute
   '/_layout/tasks': typeof LayoutTasksRoute
+  '/_layout/time-entries': typeof LayoutTimeEntriesRoute
   '/_layout/': typeof LayoutIndexRoute
 }
 export interface FileRouteTypes {
@@ -116,6 +125,7 @@ export interface FileRouteTypes {
     | '/items'
     | '/settings'
     | '/tasks'
+    | '/time-entries'
     | '/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -127,6 +137,7 @@ export interface FileRouteTypes {
     | '/items'
     | '/settings'
     | '/tasks'
+    | '/time-entries'
     | '/'
   id:
     | '__root__'
@@ -139,6 +150,7 @@ export interface FileRouteTypes {
     | '/_layout/items'
     | '/_layout/settings'
     | '/_layout/tasks'
+    | '/_layout/time-entries'
     | '/_layout/'
   fileRoutesById: FileRoutesById
 }
@@ -194,6 +206,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutIndexRouteImport
       parentRoute: typeof LayoutRoute
     }
+    '/_layout/time-entries': {
+      id: '/_layout/time-entries'
+      path: '/time-entries'
+      fullPath: '/time-entries'
+      preLoaderRoute: typeof LayoutTimeEntriesRouteImport
+      parentRoute: typeof LayoutRoute
+    }
     '/_layout/tasks': {
       id: '/_layout/tasks'
       path: '/tasks'
@@ -230,6 +249,7 @@ interface LayoutRouteChildren {
   LayoutItemsRoute: typeof LayoutItemsRoute
   LayoutSettingsRoute: typeof LayoutSettingsRoute
   LayoutTasksRoute: typeof LayoutTasksRoute
+  LayoutTimeEntriesRoute: typeof LayoutTimeEntriesRoute
   LayoutIndexRoute: typeof LayoutIndexRoute
 }
 
@@ -238,6 +258,7 @@ const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutItemsRoute: LayoutItemsRoute,
   LayoutSettingsRoute: LayoutSettingsRoute,
   LayoutTasksRoute: LayoutTasksRoute,
+  LayoutTimeEntriesRoute: LayoutTimeEntriesRoute,
   LayoutIndexRoute: LayoutIndexRoute,
 }
 
