@@ -51,6 +51,29 @@ export type PrivateUserCreate = {
     is_verified?: boolean;
 };
 
+export type TaskCreate = {
+    title: string;
+    description?: (string | null);
+};
+
+export type TaskPublic = {
+    title: string;
+    description?: (string | null);
+    id: string;
+    created_at: string;
+    updated_at: string;
+};
+
+export type TasksPublic = {
+    data: Array<TaskPublic>;
+    count: number;
+};
+
+export type TaskUpdate = {
+    title?: (string | null);
+    description?: (string | null);
+};
+
 export type Token = {
     access_token: string;
     token_type?: string;
@@ -66,6 +89,8 @@ export type UserCreate = {
     is_active?: boolean;
     is_superuser?: boolean;
     full_name?: (string | null);
+    role?: UserRole;
+    hourly_rate?: (number | null);
     password: string;
 };
 
@@ -74,6 +99,8 @@ export type UserPublic = {
     is_active?: boolean;
     is_superuser?: boolean;
     full_name?: (string | null);
+    role?: UserRole;
+    hourly_rate?: (number | null);
     id: string;
 };
 
@@ -82,6 +109,8 @@ export type UserRegister = {
     password: string;
     full_name?: (string | null);
 };
+
+export type UserRole = 'admin' | 'freelancer';
 
 export type UsersPublic = {
     data: Array<UserPublic>;
@@ -93,6 +122,8 @@ export type UserUpdate = {
     is_active?: boolean;
     is_superuser?: boolean;
     full_name?: (string | null);
+    role?: UserRole;
+    hourly_rate?: (number | null);
     password?: (string | null);
 };
 
@@ -170,6 +201,38 @@ export type PrivateCreateUserData = {
 };
 
 export type PrivateCreateUserResponse = (UserPublic);
+
+export type TasksReadTasksData = {
+    limit?: number;
+    skip?: number;
+};
+
+export type TasksReadTasksResponse = (TasksPublic);
+
+export type TasksCreateTaskData = {
+    requestBody: TaskCreate;
+};
+
+export type TasksCreateTaskResponse = (TaskPublic);
+
+export type TasksReadTaskData = {
+    id: string;
+};
+
+export type TasksReadTaskResponse = (TaskPublic);
+
+export type TasksUpdateTaskData = {
+    id: string;
+    requestBody: TaskUpdate;
+};
+
+export type TasksUpdateTaskResponse = (TaskPublic);
+
+export type TasksDeleteTaskData = {
+    id: string;
+};
+
+export type TasksDeleteTaskResponse = (Message);
 
 export type UsersReadUsersData = {
     limit?: number;
