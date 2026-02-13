@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { ItemsReadItemsData, ItemsReadItemsResponse, ItemsCreateItemData, ItemsCreateItemResponse, ItemsReadItemData, ItemsReadItemResponse, ItemsUpdateItemData, ItemsUpdateItemResponse, ItemsDeleteItemData, ItemsDeleteItemResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, PrivateCreateUserData, PrivateCreateUserResponse, TasksReadTasksData, TasksReadTasksResponse, TasksCreateTaskData, TasksCreateTaskResponse, TasksReadTaskData, TasksReadTaskResponse, TasksUpdateTaskData, TasksUpdateTaskResponse, TasksDeleteTaskData, TasksDeleteTaskResponse, TimeEntriesReadTimeEntriesData, TimeEntriesReadTimeEntriesResponse, TimeEntriesCreateTimeEntryData, TimeEntriesCreateTimeEntryResponse, TimeEntriesReadTimeEntryData, TimeEntriesReadTimeEntryResponse, TimeEntriesUpdateTimeEntryData, TimeEntriesUpdateTimeEntryResponse, TimeEntriesDeleteTimeEntryData, TimeEntriesDeleteTimeEntryResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse, WorklogsReadWorklogsSummaryData, WorklogsReadWorklogsSummaryResponse } from './types.gen';
+import type { ItemsReadItemsData, ItemsReadItemsResponse, ItemsCreateItemData, ItemsCreateItemResponse, ItemsReadItemData, ItemsReadItemResponse, ItemsUpdateItemData, ItemsUpdateItemResponse, ItemsDeleteItemData, ItemsDeleteItemResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, PrivateCreateUserData, PrivateCreateUserResponse, TasksReadTasksData, TasksReadTasksResponse, TasksCreateTaskData, TasksCreateTaskResponse, TasksReadTaskData, TasksReadTaskResponse, TasksUpdateTaskData, TasksUpdateTaskResponse, TasksDeleteTaskData, TasksDeleteTaskResponse, TimeEntriesReadTimeEntriesData, TimeEntriesReadTimeEntriesResponse, TimeEntriesCreateTimeEntryData, TimeEntriesCreateTimeEntryResponse, TimeEntriesReadTimeEntryData, TimeEntriesReadTimeEntryResponse, TimeEntriesUpdateTimeEntryData, TimeEntriesUpdateTimeEntryResponse, TimeEntriesDeleteTimeEntryData, TimeEntriesDeleteTimeEntryResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse, WorklogsReadWorklogsSummaryData, WorklogsReadWorklogsSummaryResponse, PaymentsReadBatchesData, PaymentsReadBatchesResponse, PaymentsCreateBatchData, PaymentsCreateBatchResponse, PaymentsReadBatchData, PaymentsReadBatchResponse, PaymentsReadBatchPaymentsData, PaymentsReadBatchPaymentsResponse, PaymentsConfirmBatchData, PaymentsConfirmBatchResponse, PaymentsDeleteBatchData, PaymentsDeleteBatchResponse } from './types.gen';
 
 export class ItemsService {
     /**
@@ -692,6 +692,132 @@ export class UtilsService {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/utils/health-check/'
+        });
+    }
+}
+
+export class PaymentsService {
+    /**
+     * Read Batches
+     * @param data The data for the request.
+     * @param data.skip
+     * @param data.limit
+     * @returns PaymentBatchesPublic Successful Response
+     * @throws ApiError
+     */
+    public static readBatches(data: PaymentsReadBatchesData = {}): CancelablePromise<PaymentsReadBatchesResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/payments/batches',
+            query: {
+                skip: data.skip,
+                limit: data.limit,
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+
+    /**
+     * Create Batch
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns PaymentBatchDetail Successful Response
+     * @throws ApiError
+     */
+    public static createBatch(data: PaymentsCreateBatchData): CancelablePromise<PaymentsCreateBatchResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/payments/batches',
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+
+    /**
+     * Read Batch
+     * @param data The data for the request.
+     * @param data.batchId
+     * @returns PaymentBatchDetail Successful Response
+     * @throws ApiError
+     */
+    public static readBatch(data: PaymentsReadBatchData): CancelablePromise<PaymentsReadBatchResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/payments/batches/{batch_id}',
+            path: {
+                batch_id: data.batchId,
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+
+    /**
+     * Read Batch Payments
+     * @param data The data for the request.
+     * @param data.batchId
+     * @returns PaymentsPublic Successful Response
+     * @throws ApiError
+     */
+    public static readBatchPayments(data: PaymentsReadBatchPaymentsData): CancelablePromise<PaymentsReadBatchPaymentsResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/payments/batches/{batch_id}/payments',
+            path: {
+                batch_id: data.batchId,
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+
+    /**
+     * Confirm Batch
+     * @param data The data for the request.
+     * @param data.batchId
+     * @param data.requestBody - Array of selected time entry IDs
+     * @returns PaymentBatchPublic Successful Response
+     * @throws ApiError
+     */
+    public static confirmBatch(data: PaymentsConfirmBatchData): CancelablePromise<PaymentsConfirmBatchResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/payments/batches/{batch_id}/confirm',
+            path: {
+                batch_id: data.batchId,
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+
+    /**
+     * Delete Batch
+     * @param data The data for the request.
+     * @param data.batchId
+     * @returns void Successful Response
+     * @throws ApiError
+     */
+    public static deleteBatch(data: PaymentsDeleteBatchData): CancelablePromise<PaymentsDeleteBatchResponse> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/api/v1/payments/batches/{batch_id}',
+            path: {
+                batch_id: data.batchId,
+            },
+            errors: {
+                422: 'Validation Error'
+            }
         });
     }
 }

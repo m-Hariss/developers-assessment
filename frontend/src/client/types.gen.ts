@@ -169,6 +169,78 @@ export type ValidationError = {
     type: string;
 };
 
+export type PaymentBatchStatus = 'DRAFT' | 'CONFIRMED';
+
+export type PaymentBatchCreate = {
+    date_from: string;
+    date_to: string;
+};
+
+export type PaymentBatchPublic = {
+    id: string;
+    created_by_id: string;
+    date_from: string;
+    date_to: string;
+    status: PaymentBatchStatus;
+    total_amount: number;
+    created_at: string;
+    confirmed_at: (string | null);
+};
+
+export type PaymentBatchesPublic = {
+    data: Array<PaymentBatchPublic>;
+    count: number;
+};
+
+export type EligibleTimeEntry = {
+    time_entry_id: string;
+    task_id: string;
+    task_title: string;
+    freelancer_id: string;
+    freelancer_name: string;
+    start_time: string;
+    end_time: string;
+    hours: number;
+    hourly_rate: number;
+    amount: number;
+};
+
+export type PaymentBatchDetail = {
+    batch: PaymentBatchPublic;
+    eligible_entries: Array<EligibleTimeEntry>;
+};
+
+export type PaymentPublic = {
+    id: string;
+    batch_id: string;
+    freelancer_id: string;
+    freelancer_name: string;
+    time_entry_id: string;
+    task_title: string;
+    hours: number;
+    hourly_rate: number;
+    amount: number;
+    created_at: string;
+};
+
+export type PaymentsPublic = {
+    data: Array<PaymentPublic>;
+    count: number;
+};
+
+export type PaymentsReadBatchesData = { skip?: number; limit?: number };
+export type PaymentsReadBatchesResponse = PaymentBatchesPublic;
+export type PaymentsCreateBatchData = { requestBody: PaymentBatchCreate };
+export type PaymentsCreateBatchResponse = PaymentBatchDetail;
+export type PaymentsReadBatchData = { batchId: string };
+export type PaymentsReadBatchResponse = PaymentBatchDetail;
+export type PaymentsReadBatchPaymentsData = { batchId: string };
+export type PaymentsReadBatchPaymentsResponse = PaymentsPublic;
+export type PaymentsConfirmBatchData = { batchId: string; requestBody: Array<string> };
+export type PaymentsConfirmBatchResponse = PaymentBatchPublic;
+export type PaymentsDeleteBatchData = { batchId: string };
+export type PaymentsDeleteBatchResponse = unknown;
+
 export type ItemsReadItemsData = {
     limit?: number;
     skip?: number;

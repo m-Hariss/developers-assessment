@@ -1,4 +1,4 @@
-import { BarChart3, Briefcase, Home, ListTodo, Timer, Users } from "lucide-react"
+import { BarChart3, CreditCard, Home, ListTodo, Timer, Users } from "lucide-react"
 
 import { SidebarAppearance } from "@/components/Common/Appearance"
 import { Logo } from "@/components/Common/Logo"
@@ -24,6 +24,7 @@ const freelancerItems: Item[] = [
 ]
 
 const adminItems: Item[] = [
+  { icon: CreditCard, title: "Payments", path: "/payments" },
   { icon: Users, title: "Admin", path: "/admin" },
 ]
 

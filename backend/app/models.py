@@ -223,6 +223,66 @@ class WorklogsSummary(SQLModel):
     count: int
 
 
+# PaymentBatch schemas
+class PaymentBatchCreate(SQLModel):
+    date_from: datetime
+    date_to: datetime
+
+
+class PaymentBatchPublic(SQLModel):
+    id: uuid.UUID
+    created_by_id: uuid.UUID
+    date_from: datetime
+    date_to: datetime
+    status: PaymentBatchStatus
+    total_amount: float
+    created_at: datetime
+    confirmed_at: datetime | None
+
+
+class PaymentBatchesPublic(SQLModel):
+    data: list[PaymentBatchPublic]
+    count: int
+
+
+# Payment schemas
+class PaymentPublic(SQLModel):
+    id: uuid.UUID
+    batch_id: uuid.UUID
+    freelancer_id: uuid.UUID
+    freelancer_name: str
+    time_entry_id: uuid.UUID
+    task_title: str
+    hours: float
+    hourly_rate: float
+    amount: float
+    created_at: datetime
+
+
+class PaymentsPublic(SQLModel):
+    data: list[PaymentPublic]
+    count: int
+
+
+# Eligible time entry for payment preview
+class EligibleTimeEntry(SQLModel):
+    time_entry_id: uuid.UUID
+    task_id: uuid.UUID
+    task_title: str
+    freelancer_id: uuid.UUID
+    freelancer_name: str
+    start_time: datetime
+    end_time: datetime
+    hours: float
+    hourly_rate: float
+    amount: float
+
+
+class PaymentBatchDetail(SQLModel):
+    batch: PaymentBatchPublic
+    eligible_entries: list[EligibleTimeEntry]
+
+
 # PaymentBatch
 class PaymentBatch(SQLModel, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
