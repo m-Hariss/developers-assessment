@@ -14,7 +14,7 @@ import { User } from "./User"
 
 const commonItems: Item[] = [
   { icon: Home, title: "Dashboard", path: "/" },
-  { icon: Briefcase, title: "Items", path: "/items" },
+  // { icon: Briefcase, title: "Items", path: "/items" },
   { icon: BarChart3, title: "Worklogs", path: "/worklogs" },
 ]
 
