@@ -1,7 +1,19 @@
 import uuid
+from datetime import datetime
+from enum import Enum
 
 from pydantic import EmailStr
 from sqlmodel import Field, Relationship, SQLModel
+
+
+class UserRole(str, Enum):
+    ADMIN = "admin"
+    FREELANCER = "freelancer"
+
+
+class PaymentBatchStatus(str, Enum):
+    DRAFT = "draft"
+    CONFIRMED = "confirmed"
 
 
 # Shared properties
@@ -10,6 +22,8 @@ class UserBase(SQLModel):
     is_active: bool = True
     is_superuser: bool = False
     full_name: str | None = Field(default=None, max_length=255)
+    role: UserRole = Field(default=UserRole.FREELANCER)
+    hourly_rate: float | None = Field(default=None)
 
 
 # Properties to receive via API on creation
@@ -44,6 +58,9 @@ class User(UserBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     hashed_password: str
     items: list["Item"] = Relationship(back_populates="owner", cascade_delete=True)
+    time_entries: list["TimeEntry"] = Relationship(back_populates="freelancer", cascade_delete=True)
+    created_batches: list["PaymentBatch"] = Relationship(back_populates="creator", cascade_delete=True)
+    payments: list["Payment"] = Relationship(back_populates="freelancer", cascade_delete=True)
 
 
 # Properties to return via API, id is always required
@@ -111,3 +128,64 @@ class TokenPayload(SQLModel):
 class NewPassword(SQLModel):
     token: str
     new_password: str = Field(min_length=8, max_length=128)
+
+
+# Task
+class Task(SQLModel, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    title: str = Field(min_length=1, max_length=255)
+    description: str | None = Field(default=None)
+
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+    time_entries: list["TimeEntry"] = Relationship(back_populates="task", cascade_delete=True)
+
+
+# TimeEntry
+class TimeEntry(SQLModel, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    task_id: uuid.UUID = Field(foreign_key="task.id", nullable=False, ondelete="CASCADE")
+    freelancer_id: uuid.UUID = Field(foreign_key="user.id", nullable=False, ondelete="CASCADE")
+
+    start_time: datetime
+    end_time: datetime
+    description: str | None = Field(default=None)
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+    task: Task | None = Relationship(back_populates="time_entries")
+    freelancer: User | None = Relationship(back_populates="time_entries")
+    payments: list["Payment"] = Relationship(back_populates="time_entry", cascade_delete=True)
+
+
+# PaymentBatch
+class PaymentBatch(SQLModel, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    created_by_id: uuid.UUID = Field(foreign_key="user.id", nullable=False, ondelete="CASCADE")
+
+    date_from: datetime
+    date_to: datetime
+    status: PaymentBatchStatus = Field(default=PaymentBatchStatus.DRAFT)
+    total_amount: float = Field(default=0.0)
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    confirmed_at: datetime | None = None
+
+    creator: User | None = Relationship(back_populates="created_batches")
+    payments: list["Payment"] = Relationship(back_populates="batch", cascade_delete=True)
+
+
+# Payment
+class Payment(SQLModel, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    batch_id: uuid.UUID = Field(foreign_key="paymentbatch.id", nullable=False, ondelete="CASCADE")
+    freelancer_id: uuid.UUID = Field(foreign_key="user.id", nullable=False, ondelete="CASCADE")
+    time_entry_id: uuid.UUID = Field(foreign_key="timeentry.id", nullable=False, ondelete="CASCADE")
+
+    hours: float
+    hourly_rate: float
+    amount: float
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+    batch: PaymentBatch | None = Relationship(back_populates="payments")
+    freelancer: User | None = Relationship(back_populates="payments")
+    time_entry: TimeEntry | None = Relationship(back_populates="payments")
